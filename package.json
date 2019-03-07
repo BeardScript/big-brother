@@ -1,0 +1,33 @@
+{
+  "name": "big-brother",
+  "version": "0.1.0",
+  "description": "A javascript watcher, which evaluates an expression and fires a callback when its value changes",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "author": "BeardScript",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/BeardScript/big-brother.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^23.3.11",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.5",
+    "tslib": "^1.9.3",
+    "typescript": "^3.2.2"
+  },
+  "keywords": [
+    "history",
+    "actions",
+    "record",
+    "undo/redo",
+    "undo",
+    "redo"
+  ]
+}
