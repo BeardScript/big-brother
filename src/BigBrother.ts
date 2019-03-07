@@ -6,6 +6,7 @@ import Watcher from './Watcher';
 export default class BigBrother {
   private _watchers: Watcher[];
   private _stop: ()=> void;
+  private _request: number;
 
   private constructor(){};
 
@@ -32,20 +33,28 @@ export default class BigBrother {
   }
 
   private initWithSetInterval( interval: number ) {
-    let refNum = setInterval( this.evaluateWatchers.bind(this), interval );
+    this._request = setInterval( this.evaluateWatchers.bind(this), interval );
     this._stop = () => {
-      clearInterval( refNum );
+      clearInterval( this._request );
     }
   }
 
   private initWithRequestAnimationFrame() {
-    let request = requestAnimationFrame( this.evaluateWatchers.bind(this) );
+    this.executeEndlessLoop();
     this._stop = () => {
-      cancelAnimationFrame( request );
+      cancelAnimationFrame( this._request );
     }
   }
 
+  private executeEndlessLoop() {
+    this.evaluateWatchers();
+    this._request = requestAnimationFrame( this.evaluateWatchers.bind(this) );
+  }
+
   private evaluateWatchers() {
-    
+    for( let i = 0; i < this._watchers.length; i++ ) {
+      let watcher = this._watchers[i];
+      watcher.run();
+    }
   }
 }
