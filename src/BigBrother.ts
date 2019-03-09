@@ -52,7 +52,7 @@ export default class BigBrother {
 
   private static executeEndlessLoop() {
     this.evaluateWatchers();
-    this._request = requestAnimationFrame( this.evaluateWatchers.bind(this) );
+    this._request = requestAnimationFrame( this.executeEndlessLoop.bind(this) );
   }
 
   private static evaluateWatchers() {
