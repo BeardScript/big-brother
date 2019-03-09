@@ -1,6 +1,6 @@
 {
-  "name": "big-brother",
-  "version": "0.1.0",
+  "name": "big-brother-js",
+  "version": "0.1.1",
   "description": "A javascript watcher, which evaluates an expression and fires a callback when its value changes",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

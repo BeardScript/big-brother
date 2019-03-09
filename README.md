@@ -9,7 +9,7 @@ This lightweight and programmer friendly module, written entirely in typescript,
 
 ```bash
 
-npm install big-brother --save
+npm install big-brother-js --save
 
 ```
 
