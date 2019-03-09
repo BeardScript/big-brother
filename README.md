@@ -1,5 +1,5 @@
 # BigBrother
-A javascript observer inspired by Vue.js watcher, which evaluates an expression and fires a callback when its value changes.
+A javascript watcher, which evaluates an expression and fires a callback when its value changes.
 
 This lightweight and programmer friendly module, written entirely in typescript, will allow you to keep track of value changes in an expression. It does not depend on any framework or library so you can easily integrate it into any node.js project.
 
@@ -68,7 +68,29 @@ BigBrother.stop();
 
 ```
 
+## Deep Watch
+
+For the time being, **BigBrother** does not support deep watch.
+
+```typescript
+
+let fooObj = { foo: 5 };
+
+BigBrother.watch(
+  ()=> {
+    return fooObj;
+  },
+  ( value )=> {
+    console.log( "fooObj has changed, and its value is now ", value );
+  }
+);
+
+fooObj.foo = 1; // Wrong: Won't trigger callback
+fooObj = { foo: 11 } // Right: Will trigger callback
+
+```
+
 ## Optimization
 
-Unless you are watching a huge amount of expressions, the **BigBrother** should not be heavy on the CPU. It will though, be hard on the RAM if you decide to watch too many large objects. So keep that in mind when calling **watch()**. Make sure you are being as specific as possible with your expressions to optimize for memory allocation and avoid heavy garbage collection.
+Unless you are watching a huge amount of expressions or updating too many observed values multiple times a second, the **BigBrother** should not be heavy on the CPU. It will though, be hard on the RAM if you decide to watch too many large objects. So keep that in mind when calling **watch()**. Make sure you are being as specific as possible with your expressions to optimize for memory allocation and avoid heavy garbage collection.
 
