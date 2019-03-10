@@ -23,7 +23,7 @@ You can do this by calling **init()**. It takes an optional parameter, which you
 
 ```typescript
 
-import BigBrother from 'big-brother';
+import BigBrother from 'big-brother-js';
 
 BigBrother.init();
 
