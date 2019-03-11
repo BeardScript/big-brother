@@ -1,13 +1,12 @@
 {
   "name": "big-brother-js",
-  "version": "0.1.2",
+  "version": "0.1.2-b",
   "description": "A javascript watcher, which evaluates an expression and fires a callback when its value changes",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest",
-    "publish": "tsc; npm publish"
+    "test": "jest"
   },
   "author": "BeardScript",
   "license": "MIT",
