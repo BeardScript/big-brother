@@ -54,9 +54,9 @@ describe( 'Detecting changes on every frame', ()=> {
   });
 
   it( '(2 watchers, 1 nested value) should trigger callback on the next frame, when the expression value changes', ( done )=> {
-    BigBrother.watch( expression2, callback2 );
+    BigBrother.watch( expression2, callback2, true );
     testValue = 10;
-    testValue2 = { foo: 5 };
+    testValue2.foo = 5;
     requestAnimationFrame( ()=> {
       expect( callbackCheck ).toEqual( true );
       expect( callbackCheck2 ).toEqual( true );
@@ -119,9 +119,9 @@ describe( 'Detecting changes on the given interval', ()=> {
   });
 
   it( '(2 watchers, 1 nested value) should trigger callback on the next interval, when the expression value changes', ( done )=> {
-    BigBrother.watch( expression2, callback2 );
+    BigBrother.watch( expression2, callback2, true );
     testValue = 15;
-    testValue2 = { foo: 5 };
+    testValue2.foo = 5;
     setTimeout( ()=> {
       expect( callbackCheck ).toEqual( true );
       expect( callbackCheck2 ).toEqual( true );

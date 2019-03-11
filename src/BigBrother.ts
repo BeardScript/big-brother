@@ -26,8 +26,8 @@ export default class BigBrother {
     this._watchers = [];
   }
 
-  static watch( expression: ()=> any, callback: ( value?: any, oldValue?: any )=> any ) {
-    let watcher = new Watcher( expression, callback );
+  static watch( expression: ()=> any, callback: ( value?: any, oldValue?: any )=> any, deepWatch?: boolean ) {
+    let watcher = new Watcher( expression, callback, deepWatch as boolean );
     this._watchers.push( watcher );
 
     return () => {

@@ -70,7 +70,7 @@ BigBrother.stop();
 
 ## Deep Watch
 
-For the time being, **BigBrother** does not support deep watch.
+You can watch for changes within an object/array, simply by setting the deepWatch parameter to true.
 
 ```typescript
 
@@ -82,15 +82,15 @@ BigBrother.watch(
   },
   ( value )=> {
     console.log( "fooObj has changed, and its value is now ", value );
-  }
+  },
+  true // Watch for changes within deep nested values of the object returned by the expression
 );
 
-fooObj.foo = 1; // Wrong: Won't trigger callback
-fooObj = { foo: 11 } // Right: Will trigger callback
+fooObj.foo = 1; // Will trigger the callback
 
 ```
 
 ## Optimization
 
-Unless you are watching a huge amount of expressions or updating too many observed values multiple times a second, the **BigBrother** should not be heavy on the CPU. It will though, be hard on the RAM if you decide to watch too many large objects. So keep that in mind when calling **watch()**. Make sure you are being as specific as possible with your expressions to optimize for memory allocation and avoid heavy garbage collection.
+Unless you are watching a huge amount of expressions or updating too many observed values multiple times a second, the **BigBrother** should not be heavy on the CPU. It will be hard on the RAM though, if you decide to watch too many large objects. So keep that in mind when calling **watch()**. Make sure you are being as specific as possible with your expressions to optimize for memory allocation and avoid heavy garbage collection.
 
