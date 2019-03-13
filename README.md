@@ -15,31 +15,15 @@ npm install big-brother-js --save
 
 ## Usage
 
-### init()
-
-Start by importing BigBrother and initializing it whenever it might seem convenient within your code. Most likely within the **main** or **index** file.
-
-You can do this by calling **init()**. It takes an optional parameter, which you can use to set the interval (in milliseconds) in which to evaluate your expressions. When called with no parameters, it will schedule to watch for changes on every frame.
-
-```typescript
-
-import BigBrother from 'big-brother-js';
-
-BigBrother.init();
-
-// OR
-
-BigBrother.init( 100 );
-
-```
-
 ### watch()
 
-Watch for changes in the return value of an expression by calling the **watch()** method, which requires two functions as parameters. The first one being the expression to watch, and the second, the callback to trigger when the value returned by the expression changes.
+Watch for changes in the return value of an expression by calling the **watch()** method, which requires two functions as parameters. The first one being the expression to watch, and the second, the callback to trigger when the value returned by the expression changes. Any call to **watch()** will automatically initialize the scheduler if it's not running already.
 
 As you can see below, it also returns a function that you can call to stop watching.
 
 ```typescript
+
+import BigBrother from 'big-brother-js';
 
 let foo = 1;
 
@@ -56,15 +40,33 @@ unwatch();
 
 ```
 
-### clear() and stop()
+### init()
 
-Use the clear() method to remove all watchers, and the stop() method to stop the scheduler. Use both together to get the **BigBrother** fully cleaned up.
+**Since version 0.2.0, you don't need to initialize BigBrother** unless you deliberately stop it or wish to provide a specific interval to fire the scheduler. Any call to **watch()** will automatically initialize the scheduler if it's not running already. Calling **init()** when **BigBrother** is allready running, will simply restart the scheduler.
+
+It takes an optional parameter, which you can use to set the interval (in milliseconds) in which to evaluate your expressions. When called with no parameters, it will schedule to watch for changes on every frame (this is the default functionality).
+
+If no interval is provided and **requestanimationframe** is not available it'll initialize with a 1000/16 ms interval.
 
 ```typescript
 
-BigBrother.clear();
+BigBrother.init(); // Checks for updates on every frame.
 
-BigBrother.stop();
+// OR
+
+BigBrother.init( 100 ); // Checks for updates every 100 milliseconds.
+
+```
+
+### clear() and stop()
+
+Use the clear() method to remove all watchers, and the stop() method to stop the scheduler.
+
+```typescript
+
+BigBrother.clear(); // Removes all watchers (hence, stops watching).
+
+BigBrother.stop(); // Stops watching, but keeps watchers.
 
 ```
 

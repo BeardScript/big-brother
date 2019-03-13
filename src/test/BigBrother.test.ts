@@ -31,14 +31,12 @@ function callback2() {
 describe( 'Detecting changes on every frame', ()=> {
 
   beforeEach(()=>{
-    BigBrother.init();
     BigBrother.watch( expression, callback );
     callbackCheck = false;
     callbackCheck2 = false;
   });
 
   afterEach(()=>{
-    BigBrother.stop();
     BigBrother.clear();
   })
 
