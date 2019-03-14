@@ -1,6 +1,6 @@
 {
   "name": "big-brother-js",
-  "version": "0.2.0",
+  "version": "0.2.0-b",
   "description": "A javascript watcher, which evaluates an expression and fires a callback when its value changes",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,11 +23,10 @@
     "typescript": "^3.2.2"
   },
   "keywords": [
-    "history",
-    "actions",
-    "record",
-    "undo/redo",
-    "undo",
-    "redo"
+    "watcher",
+    "watch",
+    "observer",
+    "observe",
+    "reactive"
   ]
 }
