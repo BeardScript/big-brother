@@ -20,9 +20,11 @@ export default class BigBrother {
     this._interval = interval;
 
     if( this._interval !== undefined )
-      this.initWithSetInterval( this._interval );
-    else if( !requestAnimationFrame )
-      this.initWithSetInterval( 1000/16 );
+      this.initWithSetTimeout();
+    else if( !requestAnimationFrame ) {
+      this._interval = this._interval !== undefined ? this._interval : 16;
+      this.initWithSetTimeout();
+    }
     else
       this.initWithRequestAnimationFrame();
   }
@@ -50,11 +52,16 @@ export default class BigBrother {
     }
   }
 
-  private static initWithSetInterval( interval: number ) {
-    this._request = setInterval( this.evaluateWatchers.bind(this), interval );
+  private static initWithSetTimeout() {
+    this.executeEndlessTimeout();
     this._stop = () => {
-      clearInterval( this._request );
+      clearTimeout( this._request );
     }
+  }
+
+  private static executeEndlessTimeout() {
+    this.evaluateWatchers();
+    this._request = setTimeout( this.executeEndlessTimeout.bind(this), this._interval );
   }
 
   private static initWithRequestAnimationFrame() {

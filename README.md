@@ -46,15 +46,15 @@ unwatch();
 
 It takes an optional parameter, which you can use to set the interval (in milliseconds) in which to evaluate your expressions. When called with no parameters, it will schedule to watch for changes on every frame (this is the default functionality).
 
-If no interval is provided and **requestanimationframe** is not available it'll initialize with a 1000/16 ms interval.
+If no interval is provided and **requestanimationframe** is not available it'll initialize with a 16 ms interval.
 
 ```typescript
 
-BigBrother.init(); // Checks for updates on every frame.
+BigBrother.init(); // Checks for updates on every frame. ( requestanimationframe() || setTimeout() )
 
 // OR
 
-BigBrother.init( 100 ); // Checks for updates every 100 milliseconds.
+BigBrother.init( 100 ); // Checks for updates every 100 milliseconds. ( setTimeout() )
 
 ```
 
