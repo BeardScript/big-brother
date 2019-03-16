@@ -51,16 +51,15 @@ describe( 'Deep Watch', ()=> {
 
   beforeEach( ()=>{
     callbackCheck = false;
-    testValue = 1;
-    watcher = new Watcher( expression, callback, true );
+    // testValue = 1;
+    // watcher = new Watcher( expression, callback, true );
   });
 
   it( 'should execute callback if a nested member of the expression value changed', () => {
     testValue = { 
       foo: 1
     };
-    watcher.run();
-    callbackCheck = false;
+    watcher = new Watcher( expression, callback, true );
 
     testValue.foo = 5;
     watcher.run();
@@ -74,8 +73,7 @@ describe( 'Deep Watch', ()=> {
         fooFoo: 1
       }
     };
-    watcher.run();
-    callbackCheck = false;
+    watcher = new Watcher( expression, callback, true );
 
     testValue.foo.fooFoo = 5;
     watcher.run();
