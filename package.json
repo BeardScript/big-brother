@@ -1,6 +1,6 @@
 {
   "name": "big-brother-js",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A javascript watcher, which evaluates an expression and fires a callback when its value changes",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/BeardScript/big-brother.git"
+    "url": "git://github.com/BeardScript/big-brother.git",
+    "launch": "tsc; npm publish;"
   },
   "dependencies": {},
   "devDependencies": {

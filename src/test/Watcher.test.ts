@@ -51,8 +51,28 @@ describe( 'Deep Watch', ()=> {
 
   beforeEach( ()=>{
     callbackCheck = false;
-    // testValue = 1;
-    // watcher = new Watcher( expression, callback, true );
+  });
+
+  it( 'should execute callback if an element of an array changes', () => {
+    testValue = [];
+    testValue.push(1);
+    watcher = new Watcher( expression, callback, true );
+
+    testValue[0] = 5;
+    watcher.run();
+    
+    expect( callbackCheck ).toBe( true );
+  });
+
+  it( 'should execute callback when adding an element to an array', () => {
+    testValue = [];
+    testValue.push(1);
+    watcher = new Watcher( expression, callback, true );
+
+    testValue.push(5);
+    watcher.run();
+    
+    expect( callbackCheck ).toBe( true );
   });
 
   it( 'should execute callback if a nested member of the expression value changed', () => {
@@ -62,6 +82,18 @@ describe( 'Deep Watch', ()=> {
     watcher = new Watcher( expression, callback, true );
 
     testValue.foo = 5;
+    watcher.run();
+    
+    expect( callbackCheck ).toBe( true );
+  });
+
+  it( 'should execute callback when adding a member to an object', () => {
+    testValue = { 
+      foo: 1
+    };
+    watcher = new Watcher( expression, callback, true );
+
+    testValue["bar"] = 5;
     watcher.run();
     
     expect( callbackCheck ).toBe( true );
