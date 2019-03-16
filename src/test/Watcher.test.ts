@@ -112,4 +112,18 @@ describe( 'Deep Watch', ()=> {
     
     expect( callbackCheck ).toBe( true );
   });
+
+  it( 'should execute callback if a deep nested member of the expression is added', () => {
+    testValue = { 
+      foo: {
+        fooFoo: 1
+      }
+    };
+    watcher = new Watcher( expression, callback, true );
+
+    testValue.foo["bar"] = 5;
+    watcher.run();
+    
+    expect( callbackCheck ).toBe( true );
+  });
 });
