@@ -21,7 +21,7 @@ export default class BigBrother {
 
     if( this._interval !== undefined )
       this.initWithSetTimeout();
-    else if( !requestAnimationFrame ) {
+    else if( !window.requestAnimationFrame ) {
       this._interval = this._interval !== undefined ? this._interval : 16;
       this.initWithSetTimeout();
     }
@@ -73,7 +73,7 @@ export default class BigBrother {
 
   private static executeEndlessLoop() {
     this.evaluateWatchers();
-    this._request = requestAnimationFrame( this.executeEndlessLoop.bind(this) );
+    this._request = window.requestAnimationFrame( this.executeEndlessLoop.bind(this) );
   }
 
   private static evaluateWatchers() {
