@@ -18,14 +18,19 @@ const callback = ( value, oldValue )=> {
 
 let callbackCheck2: boolean = false;
 
-let testValue2 = { foo: 1 };
+let testValue2 = { foo: 1, obj: { bar: 1 } };
+
+let controlValue2 = 0;
+let controlOldValue2 = 0;
 
 function expression2() {
   return testValue2;
 }
 
-function callback2() {
+function callback2( value, oldValue ) {
   callbackCheck2 = true;
+  controlValue2 = value;
+  controlOldValue2 = oldValue;
 }
 
 describe( 'Detecting changes on every frame', ()=> {
@@ -58,6 +63,33 @@ describe( 'Detecting changes on every frame', ()=> {
     requestAnimationFrame( ()=> {
       expect( callbackCheck ).toEqual( true );
       expect( callbackCheck2 ).toEqual( true );
+      expect( controlValue2 ).toEqual( testValue2 );
+      done();
+    });
+  });
+
+  it( '(2 watchers, 1 nested value) should trigger callback on the next frame, when the expression value changes', ( done )=> {
+    BigBrother.watch( expression2, callback2, true );
+    testValue2.obj.bar = 5;
+    requestAnimationFrame( ()=> {
+      expect( callbackCheck2 ).toEqual( true );
+      expect( controlValue2 ).toEqual( testValue2 );
+      done();
+    });
+  });
+
+  it( 'Should not trigger callback if object does not change', ( done )=> {
+    BigBrother.watch( expression2, callback2 );
+    requestAnimationFrame( ()=> {
+      expect( callbackCheck2 ).toEqual( false );
+      done();
+    });
+  });
+
+  it( 'Should not trigger callback if object does not change, on deep watch', ( done )=> {
+    BigBrother.watch( expression2, callback2, true );
+    requestAnimationFrame( ()=> {
+      expect( callbackCheck2 ).toEqual( false );
       done();
     });
   });
@@ -85,7 +117,7 @@ describe( 'Detecting changes on every frame', ()=> {
 describe( 'Detecting changes on the given interval', ()=> {
   beforeAll( ()=> {
     testValue = 1;
-    testValue2 = { foo: 1 };
+    testValue2 = { foo: 1, obj: { bar: 1 } };
   });
 
   beforeEach(()=>{

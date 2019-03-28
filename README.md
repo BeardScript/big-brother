@@ -42,7 +42,7 @@ unwatch();
 
 ### init()
 
-**Since version 0.2.0, you don't need to initialize BigBrother** unless you deliberately stop it or wish to provide a specific interval to fire the scheduler. Any call to **watch()** will automatically initialize the scheduler if it's not running already. Calling **init()** when **BigBrother** is allready running, will simply restart the scheduler.
+You don't need to initialize BigBrother unless you deliberately stop it or wish to provide a specific interval to fire the scheduler. Any call to **watch()** will automatically initialize the scheduler if it's not running already. Calling **init()** when **BigBrother** is allready running, will simply restart the scheduler.
 
 It takes an optional parameter, which you can use to set the interval (in milliseconds) in which to evaluate your expressions. When called with no parameters, it will schedule to watch for changes on every frame (this is the default functionality).
 
