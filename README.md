@@ -92,7 +92,4 @@ fooObj.foo = 1; // Will trigger the callback
 
 ```
 
-## Optimization
-
-Unless you are watching a huge amount of expressions or updating too many observed values multiple times a second, the **BigBrother** should not be heavy on the CPU. It will be hard on the RAM though, if you decide to watch too many large objects. So keep that in mind when calling **watch()**. Make sure you are being as specific as possible with your expressions to optimize for memory allocation and avoid heavy garbage collection.
-
+Please note that the bigger the objects you are watching, the higher amount of resources BigBrother will need in order to keep track of them. So be mindful of this when calling **watch**. Keep your expressions specific and your callbacks with the lowest possible computational complexity.
