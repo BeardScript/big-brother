@@ -1,5 +1,10 @@
 import Watcher from './Watcher';
 
+declare var global: any;
+let raf: ( ( callback: ()=>any )=>number ) | undefined;
+let cancelAf: ( ( handle: number )=> void );
+setRAF();
+
 /**
  * BigBrother is a singleton which stores and manages watchers
  */
@@ -21,7 +26,7 @@ export default class BigBrother {
 
     if( this._interval !== undefined )
       this.initWithSetTimeout();
-    else if( !requestAnimationFrame ) {
+    else if( !raf ) {
       this._interval = this._interval !== undefined ? this._interval : 16;
       this.initWithSetTimeout();
     }
@@ -67,13 +72,15 @@ export default class BigBrother {
   private static initWithRequestAnimationFrame() {
     this.executeEndlessLoop();
     this._stop = () => {
-      cancelAnimationFrame( this._request );
+      cancelAf( this._request );
     }
   }
 
   private static executeEndlessLoop() {
-    this.evaluateWatchers();
-    this._request = requestAnimationFrame( this.executeEndlessLoop.bind(this) );
+    if( raf ) {
+      this.evaluateWatchers();
+      this._request = raf( this.executeEndlessLoop.bind(this) );
+    }
   }
 
   private static evaluateWatchers() {
@@ -81,6 +88,22 @@ export default class BigBrother {
     for( let i = 0; i < this._watchers.length; i++ ) {
       let watcher = this._watchers[i];
       watcher.run();
+    }
+  }
+}
+
+function setRAF() {
+  try {
+    raf = window.requestAnimationFrame;
+    cancelAf = window.cancelAnimationFrame;
+  }
+  catch(err) {
+    try {
+      raf = global.requestAnimationFrame;
+      cancelAf = global.requestAnimationFrame;
+    }
+    catch(err) {
+      raf = undefined;
     }
   }
 }
