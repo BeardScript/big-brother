@@ -11,7 +11,7 @@ export default class Scheduler {
   private _request: number;
   private _initialized: boolean = false;
   private _interval: number | "manual" | undefined;
-  private _callbacks: ( ()=> any )[];
+  private _scheduledActions: ( ()=> any )[];
 
   constructor( interval?: number | "manual" ) {
     this.init( interval );
@@ -40,12 +40,12 @@ export default class Scheduler {
   }
 
   do( callback: ()=> any ) {
-    this._callbacks.push( callback );
+    this._scheduledActions.push( callback );
     this.init( this._interval );
 
     return () => {
-      let i = this._callbacks.indexOf( callback );
-      this._callbacks.splice( i, 1 );
+      let i = this._scheduledActions.indexOf( callback );
+      this._scheduledActions.splice( i, 1 );
     }
   }
 
@@ -77,6 +77,18 @@ export default class Scheduler {
     }
   }
 
+  executeScheduledActions() {
+    if( this._scheduledActions.length < 0 ) return this.stop();
+    for( let i = 0; i < this._scheduledActions.length; i++ ) {
+      this._scheduledActions[i]();
+    }
+  }
+
+  run() {
+    this.evaluateWatchers();
+    this.executeScheduledActions();
+  }
+
   private initWithSetTimeout() {
     this.executeTimeoutLoop();
     this._stop = () => {
@@ -85,7 +97,7 @@ export default class Scheduler {
   }
 
   private executeTimeoutLoop() {
-    this.evaluateWatchers();
+    this.run();
     this._request = setTimeout( this.executeTimeoutLoop.bind(this), this._interval as number );
   }
 
@@ -98,7 +110,7 @@ export default class Scheduler {
 
   private executeRafLoop() {
     if( raf ) {
-      this.evaluateWatchers();
+      this.run();
       this._request = raf( this.executeRafLoop.bind(this) );
     }
   }

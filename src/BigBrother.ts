@@ -25,7 +25,7 @@ export default class BigBrother {
     priorityKey = priorityKey === undefined ? this._defaultPriority : priorityKey;
 
     if( this._priorities[priorityKey] === undefined )
-      this._priorities[priorityKey] = new Scheduler( interval )
+      this._priorities[priorityKey] = new Scheduler( interval );
     else
       this._priorities[priorityKey].init( interval );
   }
@@ -57,13 +57,13 @@ export default class BigBrother {
   }
 
   /** 
-   * Schedules the execution of the given callback with the given priority.
+   * Schedules the execution of an action, with the given priority.
    * If no priority is passed, it will use the default.
    * If the given priority key does not exist, it will start a .
   */
   static do( callback: ()=> any, priorityKey?: string ): ()=> void
   /** 
-   * Schedules the execution of the given callback with the given interval.
+   * Schedules the execution an action, with the given interval.
    * If no interval is passed, it will use the default priority.
    * If the given interval matches a priority, it'll hook into its scheduler.
   */
@@ -109,6 +109,19 @@ export default class BigBrother {
 
     for( let key in this._priorities ) {
       this._priorities[key].evaluateWatchers();
+    }
+  }
+
+  /** 
+   * Use this to execute all Scheduled Actions of a given priority key.
+   * If no priority key is provided, all Scheduled Actions will be executed.
+   */
+  static executeScheduledActions( priorityKey?: string ) {
+    if( priorityKey && this._priorities[priorityKey] )
+      return this._priorities[priorityKey].executeScheduledActions();
+
+    for( let key in this._priorities ) {
+      this._priorities[key].executeScheduledActions();
     }
   }
 
