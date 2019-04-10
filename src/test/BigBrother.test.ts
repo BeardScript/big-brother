@@ -42,7 +42,7 @@ describe( 'Detecting changes on every frame', ()=> {
   });
 
   afterEach(()=>{
-    BigBrother.clear();
+    BigBrother.clearWatchers();
   })
 
   it( '(1 watcher) should trigger callback on the next frame, when the expression value changes', ( done )=> {
@@ -95,7 +95,7 @@ describe( 'Detecting changes on every frame', ()=> {
   });
 
   it( 'Should NOT detect changes after calling BigBrother.clear()', ( done )=> {
-    BigBrother.clear();
+    BigBrother.clearWatchers();
     testValue = 15;
     requestAnimationFrame( ()=> {
       expect( callbackCheck ).toEqual( false );
@@ -129,7 +129,7 @@ describe( 'Detecting changes on the given interval', ()=> {
 
   afterEach(()=>{
     BigBrother.stop();
-    BigBrother.clear();
+    BigBrother.clearWatchers();
   })
 
   it( '(1 watcher) should trigger callback on the next interval, when the expression value changes', ( done )=> {
