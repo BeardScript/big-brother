@@ -47,7 +47,7 @@ BigBrother.init( 1000, "lowPriority" ); // Runs the scheduler every 1000 ms.
 
 ### stop()
 
-Use this method to stop the scheduler with the given priority. call it with no paremeters to stop all Schedulers. 
+Use this method to stop the scheduler corresponding to the given **priorityKey**. call it with no paremeters to stop all schedulers. 
 
 ```typescript
 
