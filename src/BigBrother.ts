@@ -57,6 +57,19 @@ export default class BigBrother {
   }
 
   /** 
+   * Removes all scheduled actions of the given priorityKey.
+   * If no priorityKey is provided, all scheduled actions will be removed.
+   */
+  static clearScheduledActions( priorityKey?: string ) {
+    if( priorityKey && this._priorities[priorityKey] )
+      return this._priorities[priorityKey].clearScheduledActions();
+
+    for( let key in this._priorities ) {
+      this._priorities[key].clearScheduledActions();
+    }
+  }
+
+  /** 
    * Schedules the execution of an action, with the given priority.
    * If no priority is passed, it will use the default.
    * If the given priority key does not exist, it will start a .
@@ -91,7 +104,7 @@ export default class BigBrother {
   /** Defines an expression to watch, and a callback to trigger when the returned value of the expression changes */
   static watch( expression: ()=> any, callback: ( value?: any, oldValue?: any )=> any, deepWatch?: boolean, priorityKey?: string ) {
     if( priorityKey && this._priorities[priorityKey] === undefined )
-      throw "(BigBrother) Error: the provided priorityKey does not exist. Make sure you define it like this: BigBrother.init( 120, 'myPriorityKey' )";
+      throw new Error( "(BigBrother) Error: the provided priorityKey does not exist. Make sure you define it like this: BigBrother.init( 120, 'myPriorityKey' )" );
       
     priorityKey = priorityKey === undefined ? this._defaultPriority : priorityKey;
     this._priorities[priorityKey] = this._priorities[priorityKey] || new Scheduler();

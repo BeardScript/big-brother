@@ -11,7 +11,7 @@ export default class Scheduler {
   private _request: number;
   private _initialized: boolean = false;
   private _interval: number | "manual" | undefined;
-  private _scheduledActions: ( ()=> any )[];
+  private _scheduledActions: ( ()=> any )[] = [];
 
   constructor( interval?: number | "manual" ) {
     this.init( interval );
@@ -67,6 +67,10 @@ export default class Scheduler {
 
   clearWatchers() {
     this._watchers = [];
+  }
+
+  clearScheduledActions() {
+    this._scheduledActions = [];
   }
 
   evaluateWatchers() {

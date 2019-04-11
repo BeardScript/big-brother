@@ -130,7 +130,7 @@ describe( 'Detecting changes on the given interval', ()=> {
   afterEach(()=>{
     BigBrother.stop();
     BigBrother.clearWatchers();
-  })
+  });
 
   it( '(1 watcher) should trigger callback on the next interval, when the expression value changes', ( done )=> {
     testValue = 5;
