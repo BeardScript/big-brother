@@ -6,9 +6,7 @@ let controlOldValue = 0;
 
 let testValue: number = 1;
 
-const expression = ()=> {
-  return testValue;
-}
+const expression = ()=> testValue;
 
 const callback = ( value, oldValue )=> {
   callbackCheck = true;
@@ -23,9 +21,7 @@ let testValue2 = { foo: 1, obj: { bar: 1 } };
 let controlValue2 = 0;
 let controlOldValue2 = 0;
 
-function expression2() {
-  return testValue2;
-}
+const expression2 = ()=> testValue2;
 
 function callback2( value, oldValue ) {
   callbackCheck2 = true;

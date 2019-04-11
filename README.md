@@ -1,7 +1,15 @@
 # BigBrother
-A javascript watcher, which evaluates an expression and fires a callback when its value changes.
+A scheduler management tool for javascript.
 
-This lightweight and programmer friendly module, written entirely in typescript, will allow you to keep track of value changes in an expression. It does not depend on any framework or library so you can easily integrate it into any node.js project.
+This lightweight and programmer friendly module, written entirely in typescript, provides the means to manage multiple schedulers from one place, making it simple and stress free. BigBrother keeps track of everything so that you don't have to.
+
+## Features
+
+- Initialize multiple schedulers with different priorities.
+- Schedule actions with the desired priority.
+- Watch for value changes in expressions.
+- Stop and re-initialize your schedulers at will.
+- Flexible and user friendly API.
 
 # Instructions
 
@@ -15,11 +23,103 @@ npm install big-brother-js --save
 
 ## Usage
 
+### init()
+
+To initialize the default scheduler which uses **requestAnimationFrame** by default (falls back to 16 ms **setTimeout**) simply call init() with no parameters:
+
+```typescript
+
+BigBrother.init(); // Runs the scheduler on every frame. ( requestanimationframe() || setTimeout() )
+
+```
+
+Note: You don't need to initialize the default scheduler, unless you deliberately stop it and wish to restart it. Any call to **watch()** or **do()** without providing an interval or **priorityKey** will autimatically fire it.
+
+To initialize a scheduler other than the default, you have to specify the update interval and a **priorityKey**.
+
+```typescript
+
+BigBrother.init( 100, "highPriority" ); // Runs the scheduler every 100 ms.
+BigBrother.init( 500, "midPriority" ); // Runs the scheduler every 500 ms.
+BigBrother.init( 1000, "lowPriority" ); // Runs the scheduler every 1000 ms.
+
+```
+
+### stop()
+
+Use this method to stop the scheduler with the given priority. call it with no paremeters to stop all Schedulers. 
+
+```typescript
+
+BigBrother.stop( "someCustomPriority" ); // Stop only the scheduler with the given priorityKey
+
+BigBrother.stop(); // Stop all schedulers
+
+```
+
+### do()
+
+Schedules the execution of actions with the desired priority or update interval.
+
+To execute an action with the default scheduler simply call **do()** with a callback function.
+
+```typescript
+
+BigBrother.do( ()=> "Hello Default Scheduler" ); // Will excecute the callback on every frame.
+
+```
+
+To execute an action with a specific scheduler, pass the **priorityKey** of the scheduler you wish to use.
+
+```typescript
+
+BigBrother.init( 100, "customPriority" );
+BigBrother.do( ()=> "Hello customPriority Scheduler", "customPriority" ); // Will execute the callback every 100 ms
+
+BigBrother.init( 1000, "veryLowCustomPriority" );
+BigBrother.do( ()=> "Hello veryLowCustomPriority Scheduler", "veryLowCustomPriority" ); // Will execute the callback every 1000 ms
+
+```
+
+Note: if the given **priorityKey** does not exist, it'll throw an error.
+
+Instead of a **priorityKey** you could give it an update interval. If there's no scheduler with the same interval, it'll automatically create a new one. Otherwise, it'll hook to a matching scheduler.
+
+```typescript
+
+BigBrother.init( 100, "customPriority" );
+
+BigBrother.do( ()=> doSomething(), 100 ); // Will hook to "customPriority"
+BigBrother.do( ()=> doSomething(), 255 ); // Will create a new scheduler
+BigBrother.do( ()=> doSomethingElse(), 255 ); // Will hook to the scheduler created by the above action
+
+```
+
+To stop scheduling an action, call the function returned by **do()**.
+
+```typescript
+
+let stopSchedulingAction = BigBrother.do( ()=> doSomething() );
+
+stopSchedulingAction();
+
+```
+
+### clearScheduledActions()
+
+Use this method to remove either all scheduled actions, or only those from the selected Scheduler.
+
+```typescript
+
+BigBrother.clearScheduledActions( "someCustomPriority" ); // Clears only the scheduled actions with the given priority
+
+BigBrother.clearScheduledActions(); // Clears all scheduled actions
+
+```
+
 ### watch()
 
-Watch for changes in the return value of an expression by calling the **watch()** method, which requires two functions as parameters. The first one being the expression to watch, and the second, the callback to trigger when the value returned by the expression changes. Any call to **watch()** will automatically initialize the scheduler if it's not running already.
-
-As you can see below, it also returns a function that you can call to stop watching.
+Watches for changes in the return value of an expression. It requires two functions as parameters. The first one being the expression to watch, and the second, the callback to trigger when a change is detected. Any call to **watch()** will automatically initialize the scheduler if it's not running already.
 
 ```typescript
 
@@ -27,69 +127,50 @@ import BigBrother from 'big-brother-js';
 
 let foo = 1;
 
-const unwatch = BigBrother.watch(
-  ()=> {
-    return foo;
-  },
-  ( value )=> {
-    console.log( "foo has changed, and its value is now ", value );
-  }
-);
-
-unwatch();
+BigBrother.watch( ()=> foo, value => console.log( "foo has changed, and its value is now ", value ) );
 
 ```
-
-### init()
-
-You don't need to initialize BigBrother unless you deliberately stop it or wish to provide a specific interval to fire the scheduler. Any call to **watch()** will automatically initialize the scheduler if it's not running already. Calling **init()** when **BigBrother** is allready running, will simply restart the scheduler.
-
-It takes an optional parameter, which you can use to set the interval (in milliseconds) in which to evaluate your expressions. When called with no parameters, it will schedule to watch for changes on every frame (this is the default functionality).
-
-If no interval is provided and **requestanimationframe** is not available it'll initialize with a 16 ms interval.
-
-```typescript
-
-BigBrother.init(); // Checks for updates on every frame. ( requestanimationframe() || setTimeout() )
-
-// OR
-
-BigBrother.init( 100 ); // Checks for updates every 100 milliseconds. ( setTimeout() )
-
-```
-
-### clear() and stop()
-
-Use the clear() method to remove all watchers, and the stop() method to stop the scheduler.
-
-```typescript
-
-BigBrother.clear(); // Removes all watchers (hence, stops watching).
-
-BigBrother.stop(); // Stops watching, but keeps watchers.
-
-```
-
-## Deep Watch
-
-You can watch for changes within an object/array, simply by setting the deepWatch parameter to true.
+You can watch for changes within an object/array, simply by setting the deepWatch parameter to true:
 
 ```typescript
 
 let fooObj = { foo: 5 };
 
-BigBrother.watch(
-  ()=> {
-    return fooObj;
-  },
-  ( value )=> {
-    console.log( "fooObj has changed, and its value is now ", value );
-  },
-  true // Watch for changes within deep nested values of the object returned by the expression
-);
+BigBrother.watch( ()=> return fooObj, value => doSomething(), true ); // Watch for changes within deep nested values of an object
 
 fooObj.foo = 1; // Will trigger the callback
 
 ```
 
-Please note that the bigger the objects you are watching, the higher amount of resources BigBrother will need in order to keep track of them. So be mindful of this when calling **watch**. Keep your expressions specific and your callbacks with the lowest possible computational complexity.
+Just like with **do()** you can schedule to watch for changes using any of your previously defined schedulers by passing its **priorityKey** as the fourth parameter:
+
+```typescript
+
+BigBrother.init( 100, "highPriority" );
+
+let foo = 1;
+
+BigBrother.watch( ()=> return foo, ( value )=> doSomething(), false, "highPriority" ); // Will watch for changes every 100 ms
+
+```
+
+Note: Please keep in mind that the bigger the objects you are watching, the higher amount of resources BigBrother will need in order to keep track of them. So be mindful of this when calling **watch()**. Keep your expressions specific and your callbacks with the lowest computational complexity possible.
+
+### clearWatchers()
+
+Use this method to remove either all watchers, or only those from the selected Scheduler.
+
+```typescript
+
+BigBrother.clearWatchers( "someCustomPriority" ); // Clears only watchers with the given priority
+
+BigBrother.clearWatchers(); // Clears all watchers
+
+```
+
+## About BigBrother.
+
+This tool is still in development, and there's still a lot to improve. Use at your own peril. If you find any bugs, please open a ticket.
+
+If you feel like giving some feedback or just wish to say hi, [Hit me on twitter]: https://twitter.com/BeardScript
+
