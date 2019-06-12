@@ -35,13 +35,13 @@ BigBrother.init(); // Runs the scheduler on every frame. ( requestanimationframe
 
 Note: You don't need to initialize the default scheduler, unless you deliberately stop it and wish to restart it. Any call to **watch()** or **do()** without providing an interval or **priorityKey** will autimatically fire it.
 
-To initialize a scheduler other than the default, you have to specify the update interval and a **priorityKey**.
+To initialize a scheduler other than the default, you have to specify the update interval and a **priorityKey**. You can create as many schedulers as you like and change them on the go.
 
 ```typescript
 
-BigBrother.init( 100, "highPriority" ); // Runs the scheduler every 100 ms.
-BigBrother.init( 500, "midPriority" ); // Runs the scheduler every 500 ms.
-BigBrother.init( 1000, "lowPriority" ); // Runs the scheduler every 1000 ms.
+BigBrother.init( 100, "highPriority" ); // Runs every 100 ms.
+BigBrother.init( 500, "midPriority" ); // Runs every 500 ms.
+BigBrother.init( 1000, "lowPriority" ); // Runs every 1000 ms.
 
 ```
 
@@ -172,5 +172,5 @@ BigBrother.clearWatchers(); // Clears all watchers
 
 This tool is still in development, and there's still a lot to improve. Use at your own peril. If you find any bugs, please open a ticket.
 
-If you feel like giving some feedback or just wish to say hi, [Hit me on twitter]: https://twitter.com/BeardScript
+If you feel like giving some feedback or just wish to say hi, [Hit me on twitter](https://twitter.com/BeardScript)
 
